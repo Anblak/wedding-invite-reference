@@ -1,3 +1,22 @@
+const loaderEnvelope = document.querySelector(".loader-envelope");
+
+if (loaderEnvelope) {
+  let isOpened = false;
+
+  function openInvitation() {
+    if (isOpened) return;
+    isOpened = true;
+    loaderEnvelope.classList.add("is-opening");
+    document.body.classList.remove("invite-locked");
+    window.setTimeout(() => {
+      loaderEnvelope.remove();
+    }, 720);
+  }
+
+  loaderEnvelope.addEventListener("click", openInvitation);
+  window.setTimeout(openInvitation, 5000);
+}
+
 const countdown = document.querySelector(".countdown");
 
 if (countdown) {
@@ -27,9 +46,23 @@ if (countdown) {
 
 const form = document.querySelector("#rsvp-form");
 const note = document.querySelector("#form-note");
+const plusOneCheckbox = document.querySelector("#plus-one");
+const plusOneField = document.querySelector(".plus-one-field");
+const plusOneInput = plusOneField?.querySelector("input");
+
+plusOneCheckbox?.addEventListener("change", () => {
+  const isChecked = plusOneCheckbox.checked;
+  plusOneField.hidden = !isChecked;
+  plusOneInput.required = isChecked;
+  if (!isChecked) {
+    plusOneInput.value = "";
+  }
+});
 
 form?.addEventListener("submit", (event) => {
   event.preventDefault();
   form.reset();
+  plusOneField.hidden = true;
+  plusOneInput.required = false;
   note.textContent = "Дякуємо, відповідь збережено локально для демо.";
 });

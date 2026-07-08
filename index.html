@@ -13,13 +13,19 @@
     />
     <link rel="stylesheet" href="src/styles.css" />
   </head>
-  <body>
+  <body class="invite-locked">
+    <button class="loader-envelope" type="button" aria-label="Відкрити запрошення">
+      <span class="loader-envelope__body" aria-hidden="true">
+        <span class="loader-envelope__flap"></span>
+        <span class="loader-envelope__seal">НН</span>
+      </span>
+    </button>
     <main class="invitation" id="top">
       <section class="hero" aria-label="Запрошення">
         <img class="intro-envelope" src="assets/photos/envelope-invite.png" alt="Запрошення для гостей" />
-        <h1>Назарій <span>&amp;</span> Наталія</h1>
-        <img class="hands" src="assets/deco/hands.png" alt="" />
-        <p class="quote">
+        <h1 class="hero-reveal">Назарій <span>&amp;</span> Наталія</h1>
+        <img class="hands hero-reveal" src="assets/deco/hands.png" alt="" />
+        <p class="quote hero-reveal">
           Ти — мій берег, коли море гучне,<br />
           і мій вітер, коли душа хоче летіти.
         </p>
@@ -157,10 +163,10 @@
             <input name="name" type="text" autocomplete="name" required />
           </label>
           <label class="check">
-            <input name="plus_one" type="checkbox" />
+            <input id="plus-one" name="plus_one" type="checkbox" />
             <span>+1</span>
           </label>
-          <label class="field">
+          <label class="field plus-one-field" hidden>
             <span>Прізвище та ім'я +1</span>
             <input name="guest" type="text" />
           </label>
