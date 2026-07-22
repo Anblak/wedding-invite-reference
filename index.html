@@ -157,10 +157,15 @@
 
       <section class="section" aria-label="Анкета гостя">
         <h2>Анкета гостя</h2>
-        <form class="rsvp" id="rsvp-form">
+        <form
+          class="rsvp"
+          id="rsvp-form"
+          data-google-form-url="https://docs.google.com/forms/d/e/1FAIpQLSdKpZiwKcQv_egqTfjMgSV-NOhCjV2kRtdhAG2xHtmHBWUjPQ/formResponse"
+          novalidate
+        >
           <label class="field field-wide">
             <span>Прізвище та ім'я</span>
-            <input name="name" type="text" autocomplete="name" required />
+            <input name="name" type="text" autocomplete="name" minlength="2" maxlength="100" required />
           </label>
           <label class="check">
             <input id="plus-one" name="plus_one" type="checkbox" />
@@ -168,15 +173,15 @@
           </label>
           <label class="field plus-one-field" hidden>
             <span>Прізвище та ім'я +1</span>
-            <input name="guest" type="text" />
+            <input name="guest" type="text" minlength="2" maxlength="100" />
           </label>
           <label class="field field-wide">
             <span>Номер телефону</span>
-            <input name="phone" type="tel" autocomplete="tel" required />
+            <input name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="25" required />
           </label>
           <label class="field field-wide">
             <span>Додаткові повідомлення або побажання</span>
-            <textarea name="message" rows="4"></textarea>
+            <textarea name="message" rows="4" maxlength="500"></textarea>
           </label>
           <button type="submit">Надіслати відповідь</button>
           <p class="form-note" id="form-note" aria-live="polite"></p>

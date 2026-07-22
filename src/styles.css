@@ -639,6 +639,12 @@ h2::before {
   border-color: var(--ink-soft);
 }
 
+.field input:user-invalid,
+.field textarea:user-invalid {
+  border-color: #a33d3d;
+  box-shadow: 0 0 0 2px rgba(163, 61, 61, 0.1);
+}
+
 .check {
   display: flex;
   align-items: center;
@@ -670,6 +676,11 @@ h2::before {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
+}
+
+.rsvp button:disabled {
+  cursor: wait;
+  opacity: 0.62;
 }
 
 .form-note {

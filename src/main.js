@@ -49,6 +49,58 @@ const note = document.querySelector("#form-note");
 const plusOneCheckbox = document.querySelector("#plus-one");
 const plusOneField = document.querySelector(".plus-one-field");
 const plusOneInput = plusOneField?.querySelector("input");
+const submitButton = form?.querySelector('button[type="submit"]');
+const nameInput = form?.querySelector('[name="name"]');
+const phoneInput = form?.querySelector('[name="phone"]');
+
+function validateName(input, emptyMessage) {
+  const value = input.value.trim();
+
+  if (!value) {
+    input.setCustomValidity(emptyMessage);
+  } else if (value.length < 2) {
+    input.setCustomValidity("Введіть щонайменше 2 символи.");
+  } else {
+    input.setCustomValidity("");
+  }
+}
+
+function validatePhone() {
+  const value = phoneInput.value.trim();
+  const digitCount = value.replace(/\D/g, "").length;
+  const hasValidCharacters = /^\+?[0-9\s()-]+$/.test(value);
+
+  if (!value) {
+    phoneInput.setCustomValidity("Введіть номер телефону.");
+  } else if (!hasValidCharacters) {
+    phoneInput.setCustomValidity("Номер може містити лише цифри, пробіли, +, дужки та дефіси.");
+  } else if (digitCount < 10 || digitCount > 15) {
+    phoneInput.setCustomValidity("Номер телефону має містити від 10 до 15 цифр.");
+  } else {
+    phoneInput.setCustomValidity("");
+  }
+}
+
+function validateForm() {
+  nameInput.value = nameInput.value.trim();
+  phoneInput.value = phoneInput.value.trim();
+  plusOneInput.value = plusOneInput.value.trim();
+
+  validateName(nameInput, "Введіть прізвище та ім’я.");
+  validatePhone();
+
+  if (plusOneCheckbox.checked) {
+    validateName(plusOneInput, "Введіть прізвище та ім’я гостя.");
+  } else {
+    plusOneInput.setCustomValidity("");
+  }
+
+  return form.checkValidity();
+}
+
+nameInput?.addEventListener("input", () => validateName(nameInput, "Введіть прізвище та ім’я."));
+phoneInput?.addEventListener("input", validatePhone);
+plusOneInput?.addEventListener("input", () => validateName(plusOneInput, "Введіть прізвище та ім’я гостя."));
 
 plusOneCheckbox?.addEventListener("change", () => {
   const isChecked = plusOneCheckbox.checked;
@@ -56,13 +108,45 @@ plusOneCheckbox?.addEventListener("change", () => {
   plusOneInput.required = isChecked;
   if (!isChecked) {
     plusOneInput.value = "";
+    plusOneInput.setCustomValidity("");
   }
 });
 
-form?.addEventListener("submit", (event) => {
+form?.addEventListener("submit", async (event) => {
   event.preventDefault();
-  form.reset();
-  plusOneField.hidden = true;
-  plusOneInput.required = false;
-  note.textContent = "Дякуємо, відповідь збережено локально для демо.";
+
+  note.textContent = "";
+  if (!validateForm()) {
+    form.reportValidity();
+    return;
+  }
+
+  const formData = new FormData(form);
+  submitButton.disabled = true;
+  note.textContent = "Надсилаємо відповідь...";
+
+  try {
+    await fetch(form.dataset.googleFormUrl, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        "entry.1548962289": formData.get("name"),
+        "entry.235034788": formData.get("phone"),
+        "entry.1709636242": formData.get("plus_one") ? "Так" : "Ні",
+        "entry.673450889": formData.get("guest") || "",
+        "entry.1529608173": formData.get("message") || "",
+      }),
+    });
+
+    form.reset();
+    plusOneField.hidden = true;
+    plusOneInput.required = false;
+    note.textContent = "Дякуємо! Вашу відповідь надіслано.";
+  } catch (error) {
+    console.error(error);
+    note.textContent = "Не вдалося надіслати відповідь. Перевірте з’єднання та спробуйте ще раз.";
+  } finally {
+    submitButton.disabled = false;
+  }
 });
