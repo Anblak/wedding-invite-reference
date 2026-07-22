@@ -550,10 +550,6 @@ h2::before {
   margin-top: 24px;
 }
 
-.mobile-only {
-  display: none;
-}
-
 .palette {
   margin-top: 22px;
   display: grid;
@@ -817,10 +813,6 @@ h2::before {
   .dress-section .lead {
     margin-top: 8px;
     text-align: center;
-  }
-
-  .mobile-only {
-    display: block;
   }
 
   .palette img {
