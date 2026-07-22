@@ -641,20 +641,61 @@ h2::before {
   box-shadow: 0 0 0 2px rgba(163, 61, 61, 0.1);
 }
 
-.check {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  grid-column: 1 / -1;
-  color: var(--ink);
-  font-size: calc(var(--type-body) + 2px);
-  font-weight: 700;
+.guest-choice {
+  min-width: 0;
+  margin: 4px 0 0;
+  border: 0;
+  padding: 0;
 }
 
-.check input {
-  width: 34px;
-  height: 34px;
+.guest-choice legend {
+  margin-bottom: 8px;
+  padding: 0;
+  color: rgba(95, 128, 169, 0.82);
+  font-size: var(--type-note);
+  font-weight: 600;
+}
+
+.guest-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.guest-options label {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid rgba(36, 79, 129, 0.18);
+  border-radius: 4px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.guest-options label:has(input:checked) {
+  border-color: var(--ink-soft);
+  background: rgba(227, 236, 245, 0.54);
+}
+
+.guest-options label:has(input:focus-visible) {
+  outline: 2px solid var(--ink-soft);
+  outline-offset: 2px;
+}
+
+.guest-options input {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
   accent-color: var(--ink);
+}
+
+.guest-options span {
+  font-size: var(--type-note);
+  font-weight: 700;
+  line-height: 1.2;
 }
 
 .rsvp button {
@@ -822,5 +863,9 @@ h2::before {
 
   .rsvp {
     padding: 24px 18px;
+  }
+
+  .guest-options {
+    grid-template-columns: 1fr;
   }
 }

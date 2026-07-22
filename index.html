@@ -167,12 +167,21 @@
             <span>Прізвище та ім'я</span>
             <input name="name" type="text" autocomplete="name" minlength="2" maxlength="100" required />
           </label>
-          <label class="check">
-            <input id="plus-one" name="plus_one" type="checkbox" />
-            <span>+1</span>
-          </label>
+          <fieldset class="guest-choice field-wide">
+            <legend>Чи будете ви з гостем?</legend>
+            <div class="guest-options">
+              <label>
+                <input name="plus_one" type="radio" value="yes" required />
+                <span>Так, буду з плюс один</span>
+              </label>
+              <label>
+                <input name="plus_one" type="radio" value="no" required />
+                <span>Ні, не буде плюс один</span>
+              </label>
+            </div>
+          </fieldset>
           <label class="field plus-one-field" hidden>
-            <span>Прізвище та ім'я +1</span>
+            <span>Прізвище та ім'я вашого гостя</span>
             <input name="guest" type="text" minlength="2" maxlength="100" />
           </label>
           <label class="field field-wide">

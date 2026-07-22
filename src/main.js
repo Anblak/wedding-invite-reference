@@ -46,7 +46,7 @@ if (countdown) {
 
 const form = document.querySelector("#rsvp-form");
 const note = document.querySelector("#form-note");
-const plusOneCheckbox = document.querySelector("#plus-one");
+const plusOneRadios = form ? Array.from(form.querySelectorAll('[name="plus_one"]')) : [];
 const plusOneField = document.querySelector(".plus-one-field");
 const plusOneInput = plusOneField?.querySelector("input");
 const submitButton = form?.querySelector('button[type="submit"]');
@@ -89,7 +89,10 @@ function validateForm() {
   validateName(nameInput, "Введіть прізвище та ім’я.");
   validatePhone();
 
-  if (plusOneCheckbox.checked) {
+  const plusOneValue = form.querySelector('[name="plus_one"]:checked')?.value;
+  plusOneRadios[0].setCustomValidity(plusOneValue ? "" : "Оберіть один із варіантів.");
+
+  if (plusOneValue === "yes") {
     validateName(plusOneInput, "Введіть прізвище та ім’я гостя.");
   } else {
     plusOneInput.setCustomValidity("");
@@ -102,14 +105,22 @@ nameInput?.addEventListener("input", () => validateName(nameInput, "Введіт
 phoneInput?.addEventListener("input", validatePhone);
 plusOneInput?.addEventListener("input", () => validateName(plusOneInput, "Введіть прізвище та ім’я гостя."));
 
-plusOneCheckbox?.addEventListener("change", () => {
-  const isChecked = plusOneCheckbox.checked;
-  plusOneField.hidden = !isChecked;
-  plusOneInput.required = isChecked;
-  if (!isChecked) {
+function updatePlusOneField() {
+  const hasGuest = form.querySelector('[name="plus_one"]:checked')?.value === "yes";
+  plusOneField.hidden = !hasGuest;
+  plusOneInput.required = hasGuest;
+
+  if (!hasGuest) {
     plusOneInput.value = "";
     plusOneInput.setCustomValidity("");
   }
+}
+
+plusOneRadios.forEach((radio) => {
+  radio.addEventListener("change", () => {
+    plusOneRadios[0].setCustomValidity("");
+    updatePlusOneField();
+  });
 });
 
 form?.addEventListener("submit", async (event) => {
@@ -133,15 +144,14 @@ form?.addEventListener("submit", async (event) => {
       body: new URLSearchParams({
         "entry.1548962289": formData.get("name"),
         "entry.235034788": formData.get("phone"),
-        "entry.1709636242": formData.get("plus_one") ? "Так" : "Ні",
+        "entry.1709636242": formData.get("plus_one") === "yes" ? "Так" : "Ні",
         "entry.673450889": formData.get("guest") || "",
         "entry.1529608173": formData.get("message") || "",
       }),
     });
 
     form.reset();
-    plusOneField.hidden = true;
-    plusOneInput.required = false;
+    updatePlusOneField();
     note.textContent = "Дякуємо! Вашу відповідь надіслано.";
   } catch (error) {
     console.error(error);
